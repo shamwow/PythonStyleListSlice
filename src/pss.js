@@ -15,8 +15,6 @@ program.register('-o [file] --s', (file, options, flags) => {
     const cwd = sh.pwd();
     const out = (options.o) ? fs.createWriteStream(path.join(cwd, options.o)) : process.stdout ;
 
-    Transpiler.setNames();
-
     if (file) {
         const content = fs.readFileSync(path.join(cwd, file)).toString();
         let relativePath = file;

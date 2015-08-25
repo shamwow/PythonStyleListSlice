@@ -4,6 +4,12 @@ const acorn = require('../lib/acorn');
 
 export default {
     rangeFnName: '__$$__computedMemberRangeGet__$$__',
+    setRangeFunctionName: function (name) {
+        const fn = this[this.rangeFnName];
+        delete this[this.rangeFnName];
+        this.rangeFnName = name;
+        this[this.rangeFnName] = fn;
+    },
     '__$$__computedMemberRangeGet__$$__': function (arr, start, end, skip=1) {
         if (!Array.isArray(arr) && typeof arr !== 'string') {
             throw new Error('Computed member range gets only supported on arrays and strings.');
@@ -31,6 +37,12 @@ export default {
     },
 
     getFnName: '__$$__computedMemberGet__$$__',
+    setGetFunctionName: function (name) {
+        const fn = this[this.getFnName];
+        delete this[this.getFnName];
+        this.getFnName = name;
+        this[this.getFnName] = fn;
+    },
     '__$$__computedMemberGet__$$__': function (arr, idx) {
         const isInt = num =>
                 typeof num === 'number' && num % 1 === 0;
@@ -47,6 +59,12 @@ export default {
     },
 
     setFnName: '__$$__computedMemberSet__$$__',
+    setSetFunctionName: function (name) {
+        const fn = this[this.setFnName];
+        delete this[this.setFnName];
+        this.setFnName = name;
+        this[this.setFnName] = fn;
+    },
     '__$$__computedMemberSet__$$__': function (arr, idx, val) {
         const isInt = num =>
                 typeof num === 'number' && num % 1 === 0;
@@ -75,6 +93,8 @@ export default {
     },
 
     transpile: function (content, fileName='dummy.js', sourceMap=false) {
+        this.setNames();
+
         const opts = (sourceMap) ? {
             sourceMap: fileName,
             sourceMapWithCode: true,

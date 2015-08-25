@@ -4,7 +4,25 @@ Python like list slicing in javascript. Transpiles JavaScript to allow for `arr[
 # Installation
 `npm -g install python-style-slicing`
 
-# Usage
+# Node API
+
+#### PSS::transpile(code, filename='dummy.js', sourceMap=false)
+- `code`: the code transpile
+- `filename`: original file code came from. Used in creation of sourcemaps. Defaults to `'dummy.js'`
+- `sourceMap`: boolean indicating whether or not to generate source maps. Defaults to `false`
+
+
+##### Example usage
+
+```
+import PSS from 'python-style-slicing';
+
+const code = ['var x = [1, 2, 3, 4, 5];', 'console.log(x[::2]);'].join('\n');
+
+const output = PSS.transpile(code, 'test.js', true);
+```
+
+# CLI
 `pss [file] [--s] [-o output_location]`
 
 If no file given, `pss` will read from `stdin`. If no output location given, `pss` will output to `stdout`. The `--s` flag option indicates whether or not to generate source maps along with output.
@@ -29,3 +47,7 @@ ComputedMemberAssignmentExpression ->
 ComputedMember ->
     __$$__ComputedMemberGet__$$__(array, property)
 ```
+# License
+
+MIT
+
