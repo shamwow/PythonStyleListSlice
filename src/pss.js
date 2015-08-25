@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+require('source-map-support').install();
+require('babel/polyfill');
+
 import ArgvParser from 'argvparser';
 import fs from 'fs';
 import path from 'path';
@@ -11,6 +14,8 @@ const program = new ArgvParser();
 program.register('-o', (files, options) => {
     const cwd = sh.pwd();
     const out = (options.o) ? fs.createWriteStream(path.join(cwd, options.o)) : process.stdout ;
+
+    Transpiler.setNames();
 
     let input = '';
     process.stdin.on('data', function(chunk) {

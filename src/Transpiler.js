@@ -1,9 +1,10 @@
-import acorn from '../lib/acorn';
 import escodegen from '../lib/escodegen';
+// Need to do old style require for acorn because its build process is a bit different.
+const acorn = require('../lib/acorn');
 
 export default {
     rangeFnName: '__$$__computedMemberRangeGet__$$__',
-    rangeFn: function (arr, start, end, skip=1) {
+    '__$$__computedMemberRangeGet__$$__': function (arr, start, end, skip=1) {
         if (!Array.isArray(arr) && typeof arr !== 'string') {
             throw new Error('Computed member range gets only supported on arrays and strings.');
         }
@@ -30,7 +31,7 @@ export default {
     },
 
     getFnName: '__$$__computedMemberGet__$$__',
-    getFn: function (arr, idx) {
+    '__$$__computedMemberGet__$$__': function (arr, idx) {
         const isInt = num =>
                 typeof num === 'number' && num % 1 === 0;
 
@@ -46,7 +47,7 @@ export default {
     },
 
     setFnName: '__$$__computedMemberSet__$$__',
-    setFn: function (arr, idx, val) {
+    '__$$__computedMemberSet__$$__': function (arr, idx, val) {
         const isInt = num =>
                 typeof num === 'number' && num % 1 === 0;
 
@@ -62,9 +63,9 @@ export default {
     },
 
     functionCode: function () {
-        return `var ${this.getFnName} = ${this.getFn.toString()}\n`
-                + `var ${this.setFnName} = ${this.setFn.toString()}\n`
-                + `var ${this.rangeFnName} = ${this.rangeFn.toString()}\n\n`;
+        return `${this[this.getFnName].toString()}\n`
+                + `${this[this.setFnName].toString()}\n`
+                + `${this[this.rangeFnName].toString()}\n\n`;
     },
 
     setNames: function () {
@@ -74,15 +75,18 @@ export default {
     },
 
     transpile: function (content, sourceMap=true) {
-        return this.functionCode() +
-                escodegen.generate(acorn.parse(content, {
-                    ecmaVersion: 8,
-                    allowHashBang: true,
-                    preserveParens: true
-                }), {
-                    sourceMap: sourceMap,
-                    sourceMapWithCode: sourceMap,
-                    comment: true
-                });
+        const result = escodegen.generate(acorn.parse(content, {
+            ecmaVersion: 8,
+            allowHashBang: true,
+            preserveParens: true
+        }), {
+            sourceMap: sourceMap,
+            sourceMapWithCode: sourceMap,
+            comment: true
+        });
+
+        console.log(result.map.toString());
+
+        return this.functionCode() + result.code;
     }
 };

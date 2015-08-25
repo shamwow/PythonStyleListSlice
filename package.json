@@ -1,11 +1,8 @@
 {
-  "name": "computed-member-ranges",
+  "name": "python-style-slicing",
   "version": "1.0.0",
   "description": "Python style list slicing for JavaScript arrays.",
-  "main": "./dist/main.js",
-  "scripts": {
-    "prepublish": "node ./lib/acorn/bin/build-acorn.js && gulp compile:source"
-  },
+  "main": "./dist/Transpiler.js",
   "author": "Shahmeer Navid <shahmeernavid@gmail.com> (http://shahmeer.co/)",
   "license": "MIT",
   "devDependencies": {
@@ -20,6 +17,6 @@
     "source-map-support": "^0.3.2"
   },
   "bin": {
-    "cmr": "bin/cmr.js"
+    "pss": "dist/pss.js"
   }
 }
