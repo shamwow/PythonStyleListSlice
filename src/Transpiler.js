@@ -74,19 +74,29 @@ export default {
         process.env['__$$__computedMemberRangeGet__$$__'] = this.rangeFnName;
     },
 
-    transpile: function (content, sourceMap=true) {
+    transpile: function (content, fileName='dummy.js', sourceMap=false) {
+        const opts = (sourceMap) ? {
+            sourceMap: fileName,
+            sourceMapWithCode: true,
+            comment: true,
+            sourceContent: content
+        } : undefined;
+
         const result = escodegen.generate(acorn.parse(content, {
             ecmaVersion: 8,
             allowHashBang: true,
-            preserveParens: true
-        }), {
-            sourceMap: sourceMap,
-            sourceMapWithCode: sourceMap,
-            comment: true
-        });
+            preserveParens: true,
+            locations: sourceMap,
+            sourceFile: fileName
+        }), opts);
 
-        console.log(result.map.toString());
+        let output = this.functionCode() + result.code;
 
-        return this.functionCode() + result.code;
+        if (sourceMap) {
+            output += '\n//# sourceMappingURL=data:application/json;base64,' +
+                    new Buffer(result.map.toString()).toString('base64');
+        }
+
+        return output;
     }
 };
