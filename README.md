@@ -7,7 +7,7 @@ Python like list slicing in javascript. Transpiles JavaScript to allow for `arr[
 # Node API
 
 #### PSS::transpile(code, filename='dummy.js', sourceMap=false)
-- `code`: the code transpile
+- `code`: the code to transpile
 - `filename`: original file code came from. Used in creation of sourcemaps. Defaults to `'dummy.js'`
 - `sourceMap`: boolean indicating whether or not to generate source maps. Defaults to `false`
 
@@ -38,7 +38,7 @@ ComputedMemberRangeExpression: {
 ComputedMemberAssignmentExpression: <The same as an AssignmentExpression>
 ```
 
-A modified version of the (escodegen)[https://github.com/estools/escodegen] code generator then generates code.
+A modified version of the [escodegen](https://github.com/estools/escodegen) code generator then generates code.
 ```
 ComputedMemberRangeExpression ->
     __$$__computedMemberRangeGet__$$__(array, startExpression, endExpression, skipExpression)
